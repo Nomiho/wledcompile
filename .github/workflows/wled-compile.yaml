@@ -1,3 +1,4 @@
+
 name: WLED compile
 
 on:
@@ -22,15 +23,16 @@ jobs:
       run: |
         rm -rf /tmp/WLEDtemp/* || true
         mkdir -p /tmp/WLEDtemp
-        wget https://github.com/atuline/WLED/archive/refs/heads/dev.zip -O /tmp/WLEDtemp/mm.zip
+        wget https://api.github.com/repos/Aircoookie/WLED/zipball/v0.14.0 -O /tmp/WLEDtemp/mm.zip
         unzip /tmp/WLEDtemp/mm.zip -d /tmp/WLEDtemp
         find /tmp/WLEDtemp -maxdepth 1 -mindepth 1 -name "*" -type d >> /tmp/WLEDtemp/wledfoldername
         cd `cat /tmp/WLEDtemp/wledfoldername`
         echo '[env:custom_build]' >>platformio.ini
-        echo 'extends = env:soundReactive_esp32dev' >>platformio.ini
-        echo 'build_flags = ${env:soundReactive_esp32dev.build_flags} -D USERMOD_SENSORSTOMQTT -D USERMOD_BME280' >>platformio.ini
+        echo 'extends = env:esp32dev_audioreactive' >>platformio.ini
+        echo 'build_flags = ${env:esp32dev_audioreactive.build_flags} -D USERMOD_AUDIOREACTIVE -D USERMOD_SENSORSTOMQTT -D USERMOD_BME280' >>platformio.ini
         echo 'lib_deps = ' >>platformio.ini
-        echo '  ${env:soundReactive_esp32dev.lib_deps}' >>platformio.ini
+        echo '  ${env:esp32dev_audioreactive.lib_deps}' >>platformio.ini
+        echo '  https://github.com/blazoncek/arduinoFFT.git' >>platformio.ini
         echo '  adafruit/Adafruit BMP280 Library @ 2.1.0' >>platformio.ini
         echo '  adafruit/Adafruit CCS811 Library @ 1.0.4' >>platformio.ini
         echo '  adafruit/Adafruit Si7021 Library @ 1.4.0' >>platformio.ini
